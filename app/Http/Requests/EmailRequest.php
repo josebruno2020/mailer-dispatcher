@@ -29,7 +29,14 @@ class EmailRequest extends FormRequest
             'from.address' => 'required|email',
             'from.name' => 'nullable|string|max:255',
             
-            'to' => 'required|string',
+            'to' => 'required|array',
+            'to.*.address' => 'required|email',
+            'to.*.name' => 'nullable|string|max:255',
+
+            'reply_to' => 'nullable|array',
+            'reply_to.address' => 'required_with:reply_to|email',
+            'reply_to.name' => 'nullable|string|max:255',
+
             'cc' => 'nullable|string',
             'bcc' => 'nullable|string',
 

@@ -40,14 +40,14 @@ class PhpMailerService
 
   public function send(Email $email)
   {
-    $this->mailer->setFrom($email->from['address'], $email->from['name']);
-    $this->mailer->addAddress($email->to);     //Add a recipient
-    // $this->mailer->addReplyTo('info@example.com', 'Information');
+    $this->mailer->setFrom(address: $email->from['address'], name: $email->from['name'] ?? null);
+    $this->mailer->addAddress(address: $email->to['address'], name: $email->to['name'] ?? null);
+    $this->mailer->addReplyTo(address: $email->replyTo['address'], name: $email->replyTo['name'] ?? null);
     if ($email->cc) {
-      $this->mailer->addCC($email->cc);
+      $this->mailer->addCC(address: $email->cc);
     }
     if ($email->bcc) {
-      $this->mailer->addBCC($email->bcc);
+      $this->mailer->addBCC(address: $email->bcc);
     }
 
     //Attachments
@@ -55,7 +55,7 @@ class PhpMailerService
     // $this->mailer->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
 
     //Content
-    $this->mailer->isHTML(true);                                  //Set email format to HTML
+    $this->mailer->isHTML(true);
     $this->mailer->Subject = $email->template->subject;
     $this->mailer->Body = $email->body;
 

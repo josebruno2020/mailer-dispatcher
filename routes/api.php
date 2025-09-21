@@ -43,7 +43,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 
-Route::group(['middleware' => 'auth:sanctum'], function () {
+Route::group(['middleware' => 'auth:sanctum', 'as' => 'api.'], function () {
   Route::resource('settings', SettingApiController::class);
   Route::resource('templates', TemplateApiController::class);
   Route::resource('emails', EmailApiController::class);

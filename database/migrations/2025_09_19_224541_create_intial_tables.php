@@ -40,7 +40,8 @@ return new class extends Migration
             $table->foreignUuid('setting_id')->constrained()->onDelete('cascade');
             $table->foreignUuid('template_id')->constrained()->onDelete('cascade');
             $table->jsonb('from');
-            $table->string('to');
+            $table->jsonb('to');
+            $table->jsonb('reply_to')->nullable();
             $table->string('cc')->nullable();
             $table->string('bcc')->nullable();
             $table->longText('body');

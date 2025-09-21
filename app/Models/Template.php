@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helper\StringHelper;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,9 +24,7 @@ class Template extends Model
 
     protected function getParametersAttribute(): array
     {
-        //TODO colocar em helper
-        preg_match_all('/\{\{(.*?)\}\}/', $this->body, $matches);
-        return array_unique(array_map('trim', $matches[1]));
+        return StringHelper::extractParameters($this->body);
     }
 
     public function account(): BelongsTo

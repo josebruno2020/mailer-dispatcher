@@ -17,6 +17,7 @@ class Email extends Model
         'template_id',
 
         'from',
+        'reply_to',
         'to',
         'cc',
         'bcc',        
@@ -28,6 +29,22 @@ class Email extends Model
     ];
 
     public function from(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => json_decode($value, true),
+            set: fn ($value) => json_encode($value),
+        );
+    }
+
+    public function to(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => json_decode($value, true),
+            set: fn ($value) => json_encode($value),
+        );
+    }
+
+    public function replyTo(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => json_decode($value, true),
