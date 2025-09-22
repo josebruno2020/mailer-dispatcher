@@ -92,8 +92,11 @@
                 Resend
             </x-secondary-button>
             <x-button class="mt-6" wire:click="reload">
-                <x-icon name="reload" />
+                Reload
             </x-button>
+            <x-danger-button class="mt-6" wire:confirm="Are you sure you want to delete this email?" wire:click="delete">
+                Delete
+            </x-danger-button>
         </div>
     </x-content>
 </div>

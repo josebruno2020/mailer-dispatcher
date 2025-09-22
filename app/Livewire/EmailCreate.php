@@ -44,4 +44,14 @@ class EmailCreate extends Component
             return;
         }
     }
+
+    public function delete(): void
+    {
+        if (isset($this->id)) {
+            $this->service->deleteById($this->id);
+            session()->flash('success', 'Email deleted successfully.');
+            $this->redirectRoute('emails');
+            return;
+        }
+    }
 }

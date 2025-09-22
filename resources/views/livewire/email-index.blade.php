@@ -6,6 +6,8 @@
     </x-slot>
 
     <x-content>
+        <x-flash-message class="mt-5" />
+
         <div class="mt-3 overflow-x-auto w-100">
             <table
                 class="min-w-full border dark:border-gray-600 border-gray-200 dark:bg-gray-600 bg-white rounded-lg table-auto">
@@ -20,7 +22,9 @@
                             <x-td>
                                 <x-email-status :status="$email->status" />
                             </x-td>
-                            <x-td>{{ $email->sent_at }}</x-td>
+                            <x-td>
+                                <x-format-date :date="$email->sent_at" />
+                            </x-td>
                             <td class="px-4 py-2 text-sm dark:text-gray-100 text-gray-600">
                                 <x-secondary-link href="{{ route('emails.create', ['id' => $email->id]) }}">
                                     View

@@ -14,7 +14,8 @@ class EmailService extends BaseService
   public function __construct(
     Email $model,
     private SettingService $settingService,
-    private TemplateService $templateService
+    private TemplateService $templateService,
+    private EmailAttachmentService $emailAttachmentService,
   ) {
     parent::__construct($model, "Email");
   }
@@ -28,7 +29,18 @@ class EmailService extends BaseService
       $data['parameters'] ?? []
     );
     $email = parent::create($data);
-    event(new EmailCreatedEvent($email));
+    if (count($data['attachments'] ?? []) > 0) {
+      foreach ($data['attachments'] as $attachment) {
+        $this->emailAttachmentService->create([
+          'email' => $email,
+          'file' => $attachment,
+          'driver' => 'local',
+        ]);
+      }
+    }
+    event(new EmailCreatedEvent(
+      email: $email
+    ));
     return $email;
   }
 
@@ -41,7 +53,9 @@ class EmailService extends BaseService
     $newEmail->sent_at = null;
     $newEmail->updated_at = null;
     $newEmail->save();
-    event(new EmailCreatedEvent($newEmail));
+    event(new EmailCreatedEvent(
+      email: $newEmail
+    ));
     return $newEmail;
   }
 }

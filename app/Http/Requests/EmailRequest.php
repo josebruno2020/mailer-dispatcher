@@ -40,6 +40,9 @@ class EmailRequest extends FormRequest
             'cc' => 'nullable|string',
             'bcc' => 'nullable|string',
 
+            'attachments' => 'nullable|array',
+            'attachments.*' => 'file|max:10240', // Max 10MB per file
+
             'parameters' => 'nullable|array',
         ];
     }

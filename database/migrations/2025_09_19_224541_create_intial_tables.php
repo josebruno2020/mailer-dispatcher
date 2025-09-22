@@ -38,7 +38,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('account_id')->constrained()->onDelete('cascade');
             $table->foreignUuid('setting_id')->constrained()->onDelete('cascade');
-            $table->foreignUuid('template_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('template_id')->nullable()->constrained()->onDelete('cascade');
             $table->jsonb('from');
             $table->jsonb('to');
             $table->jsonb('reply_to')->nullable();

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Email extends Model
@@ -26,6 +27,11 @@ class Email extends Model
         'error_message',
         'sent_at',
         'scheduled_at',
+    ];
+
+    protected $casts = [
+        'sent_at' => 'datetime',
+        'scheduled_at' => 'datetime',
     ];
 
     public function from(): Attribute
@@ -65,5 +71,10 @@ class Email extends Model
     public function account(): BelongsTo
     {
         return $this->belongsTo(Account::class);
+    }
+
+    public function attachments(): HasMany
+    {
+        return $this->hasMany(EmailAttachment::class);
     }
 }
