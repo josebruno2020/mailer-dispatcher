@@ -16,11 +16,13 @@
                             <x-td>{{ $email->id }}</x-td>
                             <x-td>{{ $email->setting->name }}</x-td>
                             <x-td>{{ $email->template->name }}</x-td>
-                            <x-td>{{ $email->to }}</x-td>
-                            <x-td>{{ $email->status }}</x-td>
+                            <x-td>{{ $email->to['address'] }}</x-td>
+                            <x-td>
+                                <x-email-status :status="$email->status" />
+                            </x-td>
                             <x-td>{{ $email->sent_at }}</x-td>
                             <td class="px-4 py-2 text-sm dark:text-gray-100 text-gray-600">
-                                <x-secondary-link href="{{ route('settings.create', ['id' => $email->id]) }}">
+                                <x-secondary-link href="{{ route('emails.create', ['id' => $email->id]) }}">
                                     View
                                 </x-secondary-link>
                             </td>

@@ -30,8 +30,8 @@ class EmailRequest extends FormRequest
             'from.name' => 'nullable|string|max:255',
             
             'to' => 'required|array',
-            'to.*.address' => 'required|email',
-            'to.*.name' => 'nullable|string|max:255',
+            'to.address' => 'required|email',
+            'to.name' => 'nullable|string|max:255',
 
             'reply_to' => 'nullable|array',
             'reply_to.address' => 'required_with:reply_to|email',

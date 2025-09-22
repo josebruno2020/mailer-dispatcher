@@ -42,7 +42,9 @@ class PhpMailerService
   {
     $this->mailer->setFrom(address: $email->from['address'], name: $email->from['name'] ?? null);
     $this->mailer->addAddress(address: $email->to['address'], name: $email->to['name'] ?? null);
-    $this->mailer->addReplyTo(address: $email->replyTo['address'], name: $email->replyTo['name'] ?? null);
+    if ($email->replyTo){
+      $this->mailer->addReplyTo(address: $email->replyTo['address'], name: $email->replyTo['name'] ?? null);
+    }
     if ($email->cc) {
       $this->mailer->addCC(address: $email->cc);
     }

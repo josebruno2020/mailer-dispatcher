@@ -2,7 +2,8 @@
 
 namespace App\Services;
 
-use App\Jobs\ProcessEmail;
+use App\Events\EmailCreated;
+use App\Events\EmailCreatedEvent;
 use App\Models\Email;
 
 /**
@@ -27,10 +28,20 @@ class EmailService extends BaseService
       $data['parameters'] ?? []
     );
     $email = parent::create($data);
-    // envia para a fila;
-    if (!$email->scheduled_at || $email->scheduled_at <= now()) {
-      ProcessEmail::dispatch($email);
-    }
+    event(new EmailCreatedEvent($email));
     return $email;
+  }
+
+  public function resend(string $id): Email
+  {
+    $email = $this->findOrThrow($id);
+    $newEmail = new Email($email->toArray());
+    $newEmail->status = 'pending';
+    $newEmail->scheduled_at = null;
+    $newEmail->sent_at = null;
+    $newEmail->updated_at = null;
+    $newEmail->save();
+    event(new EmailCreatedEvent($newEmail));
+    return $newEmail;
   }
 }
