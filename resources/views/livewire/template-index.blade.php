@@ -13,6 +13,24 @@
 
             <x-flash-message class="mt-5" />
 
+            {{-- filter component --}}
+        <div class="mt-5">
+            <form action="" wire:submit.prevent="search">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                    <x-input wire:model="name" placeholder="Search by name..." />
+                    <x-input wire:model="subject" placeholder="Search by subject..." />
+                </div>
+                <div class="mt-3">
+                    <x-secondary-button type="submit">
+                        Search
+                    </x-secondary-button>
+                    <x-secondary-button type="button" wire:click="resetFilters" class="ml-2">
+                        Reset
+                    </x-secondary-button>
+                </div>
+            </form>
+        </div>
+
             <div class="mt-3 overflow-x-auto w-100">
                 <table
                     class="min-w-full border dark:border-gray-600 border-gray-200 dark:bg-gray-600 bg-white rounded-lg table-auto">

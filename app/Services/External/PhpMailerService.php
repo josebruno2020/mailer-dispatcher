@@ -16,6 +16,7 @@ class PhpMailerService
   public function configure(Setting $setting): self
   {
     $this->mailer = new PHPMailer(true);
+    $this->mailer->SMTPDebug = config('app.env') === 'local' ? 4 : 0;
     $this->mailer->isSMTP();
     $this->mailer->Host = $setting->host;
     $this->mailer->SMTPAuth = true;
@@ -42,7 +43,7 @@ class PhpMailerService
     return $this;
   }
 
-  public function send(Email $email)
+  public function send(Email $email): void
   {
     $this->mailer->setFrom(address: $email->from['address'], name: $email->from['name'] ?? null);
     $this->mailer->addAddress(address: $email->to['address'], name: $email->to['name'] ?? null);
@@ -62,13 +63,11 @@ class PhpMailerService
     //Content
     $this->mailer->isHTML(true);
     $this->mailer->Subject = $email->template->subject;
-    $this->mailer->Body = $email->body;
+    $this->mailer->Body = str_replace("\n", "\r\n", $email->body);
 
     try {
-      $result = $this->mailer->send();
+      $this->mailer->send();
       $this->cleanupTempFiles($tempFiles);
-
-      return $result;
     } catch (Exception $e) {
       $this->cleanupTempFiles($tempFiles);
       throw $e;

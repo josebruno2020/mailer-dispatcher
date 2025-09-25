@@ -24,21 +24,23 @@
             id="sidebar">
             <!-- User Info at Top -->
             <div class="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700">
-                <div class="flex items-center space-x-3">
-                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                        <span class="text-white text-sm font-medium">
-                            {{ substr(Auth::user()->name, 0, 1) }}
-                        </span>
+                <a href="{{ route('profile') }}" class="hover:opacity-80">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                            <span class="text-white text-sm font-medium">
+                                {{ substr(Auth::user()->name, 0, 1) }}
+                            </span>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-gray-900 dark:text-white truncate">
+                                {{ Auth::user()->name }}
+                            </p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 truncate">
+                                {{ Auth::user()->email }}
+                            </p>
+                        </div>
                     </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-gray-900 dark:text-white truncate">
-                            {{ Auth::user()->name }}
-                        </p>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 truncate">
-                            {{ Auth::user()->email }}
-                        </p>
-                    </div>
-                </div>
+                </a>
                 <button class="lg:hidden text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white"
                     onclick="toggleSidebar()">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

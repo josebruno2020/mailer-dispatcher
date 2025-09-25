@@ -52,20 +52,20 @@
             <div>
                 <x-label for="sent_at" value="Sent At" />
                 <div class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    {{ $email->sent_at ?? 'N/A' }}
+                    <x-format-date :date="$email->sent_at" />
                 </div>
             </div>
             <div>
                 <x-label for="created_at" value="Created At" />
                 <div class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    {{ $email->created_at }}
+                    <x-format-date :date="$email->created_at" />
                 </div>
             </div>
 
              <div>
                 <x-label for="updated_at" value="Updated At" />
                 <div class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    {{ $email->updated_at }}
+                    <x-format-date :date="$email->updated_at" />
                 </div>
             </div>
         </div>

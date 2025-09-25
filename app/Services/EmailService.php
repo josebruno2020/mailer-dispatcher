@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Events\EmailCreated;
 use App\Events\EmailCreatedEvent;
 use App\Models\Email;
 
@@ -52,6 +51,7 @@ class EmailService extends BaseService
     $newEmail->scheduled_at = null;
     $newEmail->sent_at = null;
     $newEmail->updated_at = null;
+    $newEmail->error_message = null;
     $newEmail->save();
     event(new EmailCreatedEvent(
       email: $newEmail

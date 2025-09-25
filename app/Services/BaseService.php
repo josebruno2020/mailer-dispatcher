@@ -24,12 +24,18 @@ class BaseService
 
   public function paginate(array $filters = [], array $order = ['created_at' => 'desc'], int $perPage = 15): \Illuminate\Contracts\Pagination\LengthAwarePaginator
   {
-     $query = $this->model->newQuery();
-    
+    $query = $this->model->newQuery();
+
     foreach ($filters as $key => $value) {
-      $query->where($key, $value);
+      $op = '=';
+      if (is_string($value) && str_starts_with($value, 'like:')) {
+        $op = 'like';
+        $value = substr($value, 5);
+        $value = '%' . $value . '%';
+      }
+      $query->where($key, $op, $value);
     }
-    
+
     foreach ($order as $column => $direction) {
       $query->orderBy($column, $direction);
     }
