@@ -15,6 +15,8 @@ class TemplateForm extends Form
   public ?string $description = '';
   #[Validate('required|string')]
   public string $body = '';
+  public ?string $webhook_url = '';
+  public ?array $webhook_headers = null;
 
   public static function from(self $form, array $data): self
   {

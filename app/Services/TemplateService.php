@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Helper\StringHelper;
 use App\Models\Template;
 
 /**

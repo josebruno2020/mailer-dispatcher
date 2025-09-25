@@ -16,12 +16,13 @@ class TemplateCreate extends Component
     #[Url]
     public string $id;
     public array $parameters = [];
-     protected $listeners = ['updateParameters' => 'updateParameters'];
+    protected $listeners = ['updateParameters' => 'updateParameters'];
+    public bool $isGenerateModal = false;
     public function boot(TemplateService $service): void
     {
         $this->service = $service;
     }
-    public function mount():void
+    public function mount(): void
     {
         if (isset($this->id)) {
             $template = $this->service->findOrThrow($this->id);
@@ -45,17 +46,21 @@ class TemplateCreate extends Component
         if (isset($this->id)) {
             $this->service->updatePartial($this->id, $data);
             session()->flash('success', 'Template updated successfully.');
-            $this->redirectRoute('templates');
+            // $this->redirectRoute('templates');
             return;
         }
         $this->service->create($data);
         session()->flash('success', 'Template created successfully.');
-        $this->redirectRoute('templates');
-        // Implement save logic here
+        // $this->redirectRoute('templates');
     }
 
     public function updateParameters(string $body): void
     {
         $this->parameters = StringHelper::extractParameters($body);
+    }
+
+    public function openModal(): void
+    {
+        $this->isGenerateModal = true;
     }
 }

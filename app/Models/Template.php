@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Helper\StringHelper;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,6 +18,8 @@ class Template extends Model
         'description',
         'subject',
         'body',
+        'webhook_url',
+        'webhook_headers',
     ];
     protected $appends = [
         'parameters'
@@ -25,6 +28,14 @@ class Template extends Model
     protected function getParametersAttribute(): array
     {
         return StringHelper::extractParameters($this->body);
+    }
+
+    public function webhookHeaders(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value ? json_decode($value, true) : null,
+            set: fn ($value) => $value ? json_encode($value) : null,
+        );
     }
 
     public function account(): BelongsTo

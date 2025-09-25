@@ -25,6 +25,8 @@ class EmailIndex extends Component
     public string $template_id;
     #[Url]
     public string $status;
+    #[Url]
+    public string $email_id;
     public function boot(
         EmailService $service,
         SettingService $settingService,
@@ -36,16 +38,19 @@ class EmailIndex extends Component
     }
     public function mount(): void
     {
-        $accountId = ['account_id' => Auth::user()->account_id];
-        $this->settings = $this->settingService->getAll($accountId)
+        $accountFilter = ['account_id' => Auth::user()->account_id];
+
+        $this->settings = $this->settingService->getAll($accountFilter)
             ->pluck('name', 'id')->toArray();
-        $this->templates = $this->templateService->getAll($accountId)
+        $this->templates = $this->templateService->getAll($accountFilter)
             ->pluck('name', 'id')->toArray();
         $allEnumStatus = EmailStatusEnum::cases();
         $this->statuses = ['' => 'All'];
         foreach ($allEnumStatus as $status) {
             $this->statuses[$status->value] = $status->name;
         }
+        $this->settings = array_merge(['' => 'All'], $this->settings);
+        $this->templates = array_merge(['' => 'All'], $this->templates);
     }
     public function render()
     {
@@ -61,6 +66,9 @@ class EmailIndex extends Component
         if (isset($this->template_id) && $this->template_id !== '') {
             $filters['template_id'] = $this->template_id;
         }
+        if (isset($this->email_id) && $this->email_id !== '') {
+            $filters['id'] = $this->email_id;
+        }
         $emails = $this->service->paginate($filters);
         return view('livewire.email-index', compact('emails'));
     }
@@ -73,6 +81,9 @@ class EmailIndex extends Component
     public function resetFilters(): void
     {
         $this->status = '';
+        $this->setting_id = '';
+        $this->template_id = '';
+        $this->email_id = '';
         $this->resetPage();
     }
 }

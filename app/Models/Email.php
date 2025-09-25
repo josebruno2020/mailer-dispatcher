@@ -27,6 +27,9 @@ class Email extends Model
         'error_message',
         'sent_at',
         'scheduled_at',
+
+        'webhook_status',
+        'webhook_data',
     ];
 
     protected $casts = [
@@ -55,6 +58,14 @@ class Email extends Model
         return Attribute::make(
             get: fn ($value) => json_decode($value, true),
             set: fn ($value) => json_encode($value),
+        );
+    }
+
+    public function webhookData(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value ? json_decode($value, true) : null,
+            set: fn ($value) => $value ? json_encode($value) : null,
         );
     }
 

@@ -10,11 +10,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 
-class ProcessEmail implements ShouldQueue
+class ProcessEmail extends BaseJob implements ShouldQueue
 {
     use Queueable;
-    public $tries = 3;
-    public $maxExceptions = 3;
 
     /**
      * Create a new job instance.
@@ -33,22 +31,25 @@ class ProcessEmail implements ShouldQueue
             $phpMailerService->configure($this->email->setting)
                 ->send($this->email);
 
-            $emailService->updatePartial($this->email->id, [
+            $email = $emailService->updatePartial($this->email->id, [
                 'status' => EmailStatusEnum::SENT->value,
                 'sent_at' => now(),
             ]);
 
             Log::info("Email {$this->email->id} sent successfully.");
 
+            ProcessWebhook::dispatch($email);
+
         } catch (\Exception $e) {
             Log::error("Email {$this->email->id} failed. Attempt: {$this->attempts()}/{$this->tries}. Error: {$e->getMessage()}");
 
             if ($this->attempts() >= $this->tries) {
-                $emailService->updatePartial($this->email->id, [
+                $email = $emailService->updatePartial($this->email->id, [
                     'status' => EmailStatusEnum::FAILED->value,
                     'error_message' => $e->getMessage(),
                 ]);
                 Log::error("Email {$this->email->id} failed permanently after {$this->tries} attempts.");
+                ProcessWebhook::dispatch($email);
             } else {
                 $emailService->updatePartial($this->email->id, [
                     'status' => EmailStatusEnum::RETRYING->value,

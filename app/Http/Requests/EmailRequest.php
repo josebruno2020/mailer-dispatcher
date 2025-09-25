@@ -25,8 +25,8 @@ class EmailRequest extends FormRequest
             'setting_id' => 'required|string',
             'template_id' => 'required|string',
 
-            'from' => 'required|array',
-            'from.address' => 'required|email',
+            'from' => 'nullable|array',
+            'from.address' => 'nullable|email',
             'from.name' => 'nullable|string|max:255',
             
             'to' => 'required|array',

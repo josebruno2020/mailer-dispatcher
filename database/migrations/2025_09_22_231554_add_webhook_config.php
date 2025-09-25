@@ -15,6 +15,16 @@ return new class extends Migration
             $table->string('webhook_url')->nullable();
             $table->jsonb('webhook_headers')->nullable();
         });
+
+        Schema::table('templates', function (Blueprint $table) {
+            $table->string('webhook_url')->nullable();
+            $table->jsonb('webhook_headers')->nullable();
+        });
+
+        Schema::table('emails', function (Blueprint $table) {
+            $table->string('webhook_status')->nullable();
+            $table->jsonb('webhook_data')->nullable();
+        });
     }
 
     /**
@@ -22,6 +32,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropColumns('accounts', ['webhook_url', 'webhook_headers']);
+        Schema::dropColumns('templates', ['webhook_url', 'webhook_headers']);
+        Schema::dropColumns('emails', ['webhook_status', 'webhook_data']);
     }
 };

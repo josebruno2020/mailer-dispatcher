@@ -26,6 +26,8 @@ class TemplateRequest extends FormRequest
             'description' => 'nullable|string',
             'subject' => 'required|string|max:255',
             'body' => 'required|string',
+            'webhook_url' => 'nullable|url',
+            'webhook_headers' => 'nullable|array',            
         ];
     }
 }

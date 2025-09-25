@@ -12,9 +12,22 @@
         <div class="mt-5">
             <form action="" wire:submit.prevent="search">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-                    <x-select wire:model="status" :options="$statuses" />
-                    <x-select wire:model="setting_id" :options="$settings" />
-                    <x-select wire:model="template_id" :options="$templates" />
+                    <div>
+                        <x-label for="email_id" value="Email ID" class="block mb-1" />
+                        <x-input wire:model="email_id" />
+                    </div>
+                    <div>
+                        <x-label for="status" value="Status" class="block mb-1" />
+                        <x-select wire:model="status" :options="$statuses" />
+                    </div>
+                    <div>
+                        <x-label for="setting_id" value="Setting" class="block mb-1" />
+                        <x-select wire:model="setting_id" :options="$settings" />
+                    </div>
+                    <div>
+                        <x-label for="template_id" value="Template" class="block mb-1" />
+                        <x-select wire:model="template_id" :options="$templates" />
+                    </div>
                 </div>
                 <div class="mt-3">
                     <x-secondary-button type="submit">

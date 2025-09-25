@@ -21,12 +21,13 @@ class EmailService extends BaseService
 
   public function create(array $data): \Illuminate\Database\Eloquent\Model
   {
-    $this->settingService->findOrThrow($data['setting_id']);
+    $settings = $this->settingService->findOrThrow($data['setting_id']);
     $this->templateService->findOrThrow($data['template_id']);
     $data['body'] = $this->templateService->renderTemplate(
       $data['template_id'],
       $data['parameters'] ?? []
     );
+    $data['from']['address'] ??= $settings->username;
     $email = parent::create($data);
     if (count($data['attachments'] ?? []) > 0) {
       foreach ($data['attachments'] as $attachment) {
@@ -57,5 +58,20 @@ class EmailService extends BaseService
       email: $newEmail
     ));
     return $newEmail;
+  }
+
+  /**
+   * Decide which webhook config to use: template or account
+   * @param \App\Models\Email $email
+   * @return array{webhook_headers: string | null, webhook_url: string | null}
+   */
+  public function webhookDecide(Email $email): array
+  {
+    $account = $email->setting->account;
+    $template = $email->template;
+    return [
+      'webhook_url' => $template->webhook_url ?? $account->webhook_url,
+      'webhook_headers' => $template->webhook_headers ?? $account->webhook_headers,
+    ];
   }
 }
